@@ -1,4 +1,73 @@
-// Footer Component
-// This file will be populated in task 17
+'use client';
 
-export {};
+import React from 'react';
+import Link from 'next/link';
+
+export function Footer() {
+  return (
+    <footer className="bg-white border-t border-gray-200 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-gray-500">
+              © {new Date().getFullYear()} Arbitrage Scanner. All rights reserved.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <Link
+              href="#"
+              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={(e) => e.preventDefault()}
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="#"
+              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={(e) => e.preventDefault()}
+            >
+              Terms of Service
+            </Link>
+            <Link
+              href="#"
+              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={(e) => e.preventDefault()}
+            >
+              Contact
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <svg
+              className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+            <div className="text-xs text-yellow-800">
+              <p className="font-medium">Disclaimer</p>
+              <p className="mt-1">
+                This app provides simulation only, not investment advice. Users bear their own
+                trading risks. All data processing is completed locally. Cryptocurrency trading
+                involves substantial risk of loss.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;

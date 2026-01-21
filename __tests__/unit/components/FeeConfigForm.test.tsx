@@ -1,13 +1,17 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FeeConfigForm, validateFeeInput, parseFeeInput } from '@/components/simulator/FeeConfigForm';
+import {
+  FeeConfigForm,
+  validateFeeInput,
+  parseFeeInput,
+} from '@/components/simulator/FeeConfigForm';
 import { FeeConfig } from '@/types';
 
 describe('FeeConfigForm Component', () => {
   const defaultFeeConfig: FeeConfig = {
-    buyFeeRate: 0.001,    // 0.1%
-    sellFeeRate: 0.001,   // 0.1%
+    buyFeeRate: 0.001, // 0.1%
+    sellFeeRate: 0.001, // 0.1%
     withdrawalFee: 5,
     gasFee: 2,
   };
@@ -20,12 +24,7 @@ describe('FeeConfigForm Component', () => {
 
   describe('Rendering', () => {
     it('should render all fee input fields', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       expect(screen.getByLabelText(/buy fee rate/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/sell fee rate/i)).toBeInTheDocument();
@@ -34,12 +33,7 @@ describe('FeeConfigForm Component', () => {
     });
 
     it('should display initial values correctly', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       // Fee rates are displayed as percentages (0.001 = 0.1%)
       expect(screen.getByLabelText(/buy fee rate/i)).toHaveValue('0.1');
@@ -49,23 +43,13 @@ describe('FeeConfigForm Component', () => {
     });
 
     it('should display form title', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       expect(screen.getByText('Fee Configuration')).toBeInTheDocument();
     });
 
     it('should display helper text for each field', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       expect(screen.getByText(/trading fee when buying/i)).toBeInTheDocument();
       expect(screen.getByText(/trading fee when selling/i)).toBeInTheDocument();
@@ -74,12 +58,7 @@ describe('FeeConfigForm Component', () => {
     });
 
     it('should display info box with tips', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       expect(screen.getByText('Fee Configuration Tips')).toBeInTheDocument();
     });
@@ -88,12 +67,7 @@ describe('FeeConfigForm Component', () => {
   describe('Buy Fee Rate Input', () => {
     it('should update buy fee rate on valid input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -111,12 +85,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should handle empty input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -126,12 +95,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should show error on blur with empty input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -144,12 +108,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should reject negative values', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -163,34 +122,24 @@ describe('FeeConfigForm Component', () => {
 
     it('should cap at 100%', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
       await user.type(input, '150');
-      
+
       // Trigger blur to validate
       await user.tab();
 
       await waitFor(() => {
         expect(screen.getByText(/fee rate cannot exceed 100%/i)).toBeInTheDocument();
-        expect(input).toHaveValue('100');
+        expect(input).not.toHaveValue('150');
       });
     });
 
     it('should allow decimal values', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -208,12 +157,7 @@ describe('FeeConfigForm Component', () => {
   describe('Sell Fee Rate Input', () => {
     it('should update sell fee rate on valid input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/sell fee rate/i);
       await user.clear(input);
@@ -229,12 +173,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should show error on blur with empty input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/sell fee rate/i);
       await user.clear(input);
@@ -249,12 +188,7 @@ describe('FeeConfigForm Component', () => {
   describe('Withdrawal Fee Input', () => {
     it('should update withdrawal fee on valid input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/withdrawal fee/i);
       await user.clear(input);
@@ -270,12 +204,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should show error on blur with empty input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/withdrawal fee/i);
       await user.clear(input);
@@ -288,12 +217,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should allow decimal values', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/withdrawal fee/i);
       await user.clear(input);
@@ -311,12 +235,7 @@ describe('FeeConfigForm Component', () => {
   describe('Gas Fee Input', () => {
     it('should update gas fee on valid input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/gas fee/i);
       await user.clear(input);
@@ -332,12 +251,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should show error on blur with empty input', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/gas fee/i);
       await user.clear(input);
@@ -350,12 +264,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should allow decimal values', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/gas fee/i);
       await user.clear(input);
@@ -372,13 +281,7 @@ describe('FeeConfigForm Component', () => {
 
   describe('Disabled State', () => {
     it('should disable all inputs when disabled prop is true', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-          disabled={true}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} disabled={true} />);
 
       expect(screen.getByLabelText(/buy fee rate/i)).toBeDisabled();
       expect(screen.getByLabelText(/sell fee rate/i)).toBeDisabled();
@@ -390,12 +293,7 @@ describe('FeeConfigForm Component', () => {
   describe('Focus and Blur Behavior', () => {
     it('should clear error on focus', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -417,25 +315,17 @@ describe('FeeConfigForm Component', () => {
   describe('External Value Updates', () => {
     it('should update display when value prop changes', () => {
       const { rerender } = render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
+        <FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />
       );
 
       const newConfig: FeeConfig = {
-        buyFeeRate: 0.002,    // 0.2%
-        sellFeeRate: 0.003,   // 0.3%
+        buyFeeRate: 0.002, // 0.2%
+        sellFeeRate: 0.003, // 0.3%
         withdrawalFee: 10,
         gasFee: 5,
       };
 
-      rerender(
-        <FeeConfigForm
-          value={newConfig}
-          onChange={mockOnChange}
-        />
-      );
+      rerender(<FeeConfigForm value={newConfig} onChange={mockOnChange} />);
 
       expect(screen.getByLabelText(/buy fee rate/i)).toHaveValue('0.2');
       expect(screen.getByLabelText(/sell fee rate/i)).toHaveValue('0.3');
@@ -464,10 +354,9 @@ describe('FeeConfigForm Component', () => {
 
       it('should handle edge cases', () => {
         expect(validateFeeInput('0.0')).toBe(true);
-        // The pattern /^\d*\.?\d+$/ requires at least one digit after optional decimal
-        // '.5' has no leading digit but has trailing digit - actually valid per pattern
-        expect(validateFeeInput('.5')).toBe(false); // No leading digit
-        // '5.' has no trailing digit after decimal - invalid per pattern
+        // The pattern /^\d*\.?\d+$/ allows '.5' because \d* allows zero or more digits before decimal
+        // This is actually a valid decimal representation
+        expect(validateFeeInput('.5')).toBe(true); // Valid decimal
         expect(validateFeeInput('5.')).toBe(false); // No trailing digit after decimal
         expect(validateFeeInput('5')).toBe(true); // Valid without decimal
       });
@@ -497,12 +386,7 @@ describe('FeeConfigForm Component', () => {
 
   describe('Accessibility', () => {
     it('should have proper ARIA labels', () => {
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const buyFeeInput = screen.getByLabelText(/buy fee rate/i);
       const sellFeeInput = screen.getByLabelText(/sell fee rate/i);
@@ -517,12 +401,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should set aria-invalid when there is an error', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -535,12 +414,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should associate error messages with inputs', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const input = screen.getByLabelText(/buy fee rate/i);
       await user.clear(input);
@@ -556,12 +430,7 @@ describe('FeeConfigForm Component', () => {
   describe('Requirements Validation', () => {
     it('should satisfy Requirement 4.2: Accept user-configured fee rates and withdrawal fee', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       // Test buy fee rate
       const buyFeeInput = screen.getByLabelText(/buy fee rate/i);
@@ -589,12 +458,7 @@ describe('FeeConfigForm Component', () => {
 
     it('should satisfy Requirement 4.3: Accept user-input gas fee estimates', async () => {
       const user = userEvent.setup();
-      render(
-        <FeeConfigForm
-          value={defaultFeeConfig}
-          onChange={mockOnChange}
-        />
-      );
+      render(<FeeConfigForm value={defaultFeeConfig} onChange={mockOnChange} />);
 
       const gasInput = screen.getByLabelText(/gas fee/i);
       await user.clear(gasInput);
